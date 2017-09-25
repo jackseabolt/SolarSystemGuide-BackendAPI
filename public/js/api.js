@@ -11,7 +11,7 @@
  * 
  */
 
-const ITEMS_URL = '/api/items/';
+const ITEMS_URL = '/api/planets/';
 const USERS_URL = '/api/users/';
 const LOGIN_URL = '/api/auth/login/';
 
