@@ -1,5 +1,7 @@
 'use strict';
 
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
@@ -10,6 +12,7 @@ mongoose.Promise = global.Promise;
 
 const { router: usersRouter } = require('./users');
 const { router: authRouter, basicStrategy, jwtStrategy } = require('./auth');
+const { router: planetsRouter} = require('./planets');
 const { PORT, DATABASE_URL } = require('./config');
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
@@ -25,6 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/users/', usersRouter);
 app.use('/api/auth/', authRouter);
+app.use('/api/planets/', planetsRouter);
 
 app.get('/api/protected', jwtAuth, (req, res) => {
   return res.json({ data: 'rosebud' });
