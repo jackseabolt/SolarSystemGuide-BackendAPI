@@ -39,7 +39,7 @@ function isAdminMiddleware(req, res, next){
   }
 }
 
-app.get('/api/protected', jwtAuth, isAdminMiddleware, (req, res) => {
+app.get('/api/protected', jwtAuth, (req, res) => {
   return res.json({ data: 'rosebud' });
 });
 
