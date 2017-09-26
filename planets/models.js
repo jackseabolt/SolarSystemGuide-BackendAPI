@@ -7,7 +7,7 @@ mongoose.Promise = global.Promise;
 
 const Moons = mongoose.Schema({
 
-})
+});
 
 const PlanetSchema = mongoose.Schema({
   name: {
@@ -43,14 +43,18 @@ const PlanetSchema = mongoose.Schema({
     ]
 });
 
+// Planet.Schema.virual('moonData').getfunction() {
+//   return `${this.moon.n`
+// }
+
 PlanetSchema.methods.apiRepr = function () {
   return { 
     name: this.name,
     description: this.description,
     composition: this.composition,
     thumbnail: this.thumbnail,
-    moons: this.moons,
-    comments: this.comments 
+    moons: this.moons.name,
+    comments: this.comments.content 
   };
 };
 
