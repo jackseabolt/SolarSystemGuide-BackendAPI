@@ -2,3 +2,10 @@ language: node_js
 node_js: node
 services:
 - mongodb
+deploy:
+  provider: heroku
+  api_key:
+    secure: h8/n9HrTCRQMsFD/6FmmU8Tru7V4nwjqrvKdZEuG4+vaE+wQIMLeH5h38NEFljJJElh3K723HGFls+619Wmw0oecEp2YUvktLrT1YSXlqz+uuIeZQHpRIHQQiSTbg9lxNJEbOW25C7hvhjlbcd/xBp8ORdWPYAVGTouIXL8BrlvJdWlzSch1P8RBgncCfTC3+9+4Xcvwt+Pa4lo8CwDAPKfeld7I6wQw8CqSli84Y8ZoWMBtnTYMzLrsAVuuDiSsWTXeu1pKp8xVQV7kwB+5AqwImXLLUImrJ7aCj/wH740Cxatm5drlBaYACwC7T9nT33QfirBp4O0V/31BK+R1w4gw7D44+4SPZtHSTuMROWW36gQmfR0kcvuRYcx+cr0u31vul2yKQX0rG2u/kWSu4Imd7iUXv/HipJfT/gtDM7kWS68eGHUBvHT3m7HjEM8GX6vjEis8b+wkboWydsQXoknj2sODniPfNu9GZHQIEy+dMDM4HijKn4/zjx5yBLrnZjddPbdyy+zdljIp0D8a8rURwQlSyKIiIGogm1mvUSz4XjYFEXcWqkqwIJSOF7zsyEWmf7xavgMRMf2jrt6F2e64f9En0KlREgLdvIsl9fnN1OkyTud9I/DtKWZ7WSjwFXcKYWNf1mgJ4sLQwVgezbh8DEZuaxQVAkfUIN3kPrY=
+  app: solarsystem-api
+  on:
+    repo: ericpcho/node-jwt-auth
