@@ -15,6 +15,18 @@ router.get('/', (req, res) => {
     .then(planets => res.json(planets));
 });
 
+router.get('/:id', (req, res) => {
+  Planet
+    .findById(req.params.id)
+    .then(planet => {
+      res.status(200).json(planet)
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({error: 'Something went wrong'}); 
+    })
+})
+
 router.post('/', jsonParser, (req, res) => {
   const newPlanet = { 
     name: req.body.name,
@@ -33,6 +45,29 @@ router.post('/', jsonParser, (req, res) => {
       res.status(500).json({error: 'Something went wrong'});
     });
 });
+
+router.put('/:id', jsonParser, (req, res) => {
+  if(!(req.params.id || req.body.id || req.params.id == req.body.id)){
+    res.status(500).json({error: 'Something went wrong'})
+  }
+  Planet 
+    .findByIdAndUpdate(req.params.id, {$set: req.body})
+    .then(planet => {
+      res.sendStatus(204); 
+    })
+    .catch(err => {
+      console.error(err); 
+      res.status(500).json({error: 'Something went wrong'}); 
+    })
+})
+
+router.delete('/:id', (req, res) => {
+  Planet
+    .findByIdAndRemove(req.params.id)
+    .then(response => {
+      res.sendStatus(204); 
+    })
+})
 
 
 module.exports = { router };
