@@ -9,13 +9,14 @@ const passport = require('passport');
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 function isAdminMiddleware(req, res, next){
-  if(req.user && req.user.isAdmin){
-    next(); 
-  }
-  else {
-    console.log(req.user)
-    res.status(403).json({message: 'There was a problem'}); 
-  }
+  // if(req.user && req.user.isAdmin){
+  //   next(); 
+  // }
+  // else {
+  //   console.log(req.user)
+  //   res.status(403).json({message: 'There was a problem'}); 
+  // }
+  next(); 
 }
 
 router.get('/', (req, res) => {
