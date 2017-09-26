@@ -53,8 +53,8 @@ PlanetSchema.methods.apiRepr = function () {
     description: this.description,
     composition: this.composition,
     thumbnail: this.thumbnail,
-    moons: this.moons.name,
-    comments: this.comments.content 
+    moons: this.moons,
+    comments: this.comments 
   };
 };
 

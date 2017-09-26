@@ -27,7 +27,7 @@ router.post('/', jsonParser, (req, res) => {
 
   Planet
     .create(newPlanet)
-    .then(planet => res.status(201).json(planet.apiRepr()))
+    .then(planet => res.status(201).json(planet))
     .catch(err => {
       console.error(err);
       res.status(500).json({error: 'Something went wrong'});
