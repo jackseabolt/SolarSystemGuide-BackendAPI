@@ -17,6 +17,7 @@ chai.use(chaiHttp);
 describe('Auth endpoints', function () {
   const username = 'exampleUser';
   const password = 'examplePass';
+  const isAdmin = false; 
 
   before(function () {
     return runServer();
@@ -28,7 +29,7 @@ describe('Auth endpoints', function () {
 
   beforeEach(function () {
     return User.hashPassword(password).then(password =>
-      User.create({ username, password })
+      User.create({ username, password, isAdmin})
     );
   });
 
@@ -100,7 +101,7 @@ describe('Auth endpoints', function () {
           const payload = jwt.verify(token, JWT_SECRET, {
             // algorithm: ['HS256']
           });
-          expect(payload.user).to.deep.equal({ username });
+          expect(payload.user).to.deep.equal({ username, isAdmin });
         });
     });
   });

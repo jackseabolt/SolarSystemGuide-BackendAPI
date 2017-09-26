@@ -262,7 +262,7 @@ describe('/api/user', function () {
           .then(res => {
             expect(res).to.have.status(201);
             expect(res.body).to.be.an('object');
-            expect(res.body).to.have.keys('username');
+            expect(res.body).to.have.keys('username', 'isAdmin');
             expect(res.body.username).to.equal(username);
             return User.findOne({ username });
           })

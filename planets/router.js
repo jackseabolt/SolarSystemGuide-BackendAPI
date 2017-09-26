@@ -2,14 +2,23 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-
 const { Planet } = require('./models');
-
 const router = express.Router();
-
 const jsonParser = bodyParser.json();
+const passport = require('passport');
+const jwtAuth = passport.authenticate('jwt', { session: false });
 
-router.get('/', (req, res) => {
+function isAdminMiddleware(req, res, next){
+  if(req.user && req.user.isAdmin){
+    next(); 
+  }
+  else {
+    console.log(req.user)
+    res.status(403).json({message: 'There was a problem'}); 
+  }
+}
+
+router.get('/', jwtAuth, isAdminMiddleware, (req, res) => {
   Planet
     .find()
     .then(planets => res.json(planets));
@@ -27,7 +36,7 @@ router.get('/:id', (req, res) => {
     })
 })
 
-router.post('/', jsonParser, (req, res) => {
+router.post('/', jsonParser, jwtAuth, isAdminMiddleware, (req, res) => {
   const newPlanet = { 
     name: req.body.name,
     description: req.body.description,
@@ -46,7 +55,7 @@ router.post('/', jsonParser, (req, res) => {
     });
 });
 
-router.put('/:id', jsonParser, (req, res) => {
+router.put('/:id', jsonParser, jwtAuth, isAdminMiddleware, (req, res) => {
   if(!(req.params.id || req.body.id || req.params.id == req.body.id)){
     res.status(500).json({error: 'Something went wrong'})
   }
@@ -61,7 +70,7 @@ router.put('/:id', jsonParser, (req, res) => {
     })
 })
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', jwtAuth, isAdminMiddleware, (req, res) => {
   Planet
     .findByIdAndRemove(req.params.id)
     .then(response => {

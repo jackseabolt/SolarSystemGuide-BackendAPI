@@ -14,11 +14,17 @@ const UserSchema = mongoose.Schema({
   password: {
     type: String,
     required: true
+  },
+  isAdmin: {
+    type: Boolean, default: false
   }
 });
 
 UserSchema.methods.apiRepr = function () {
-  return { username: this.username };
+  return { 
+    username: this.username, 
+    isAdmin: this.isAdmin
+  };
 };
 
 UserSchema.methods.validatePassword = function (password) {
