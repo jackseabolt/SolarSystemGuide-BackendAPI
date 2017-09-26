@@ -18,7 +18,7 @@ function isAdminMiddleware(req, res, next){
   }
 }
 
-router.get('/', jwtAuth, isAdminMiddleware, (req, res) => {
+router.get('/', (req, res) => {
   Planet
     .find()
     .then(planets => res.json(planets));
