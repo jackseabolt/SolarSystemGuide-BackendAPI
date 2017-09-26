@@ -30,7 +30,16 @@ app.use('/api/users/', usersRouter);
 app.use('/api/auth/', authRouter);
 app.use('/api/planets/', planetsRouter);
 
-app.get('/api/protected', jwtAuth, (req, res) => {
+function isAdminMiddleware(req, res, next){
+  if(req.user && req.user.isAdmin){
+    next(); 
+  }
+  else {
+    next(error); 
+  }
+}
+
+app.get('/api/protected', jwtAuth, isAdminMiddleware, (req, res) => {
   return res.json({ data: 'rosebud' });
 });
 
