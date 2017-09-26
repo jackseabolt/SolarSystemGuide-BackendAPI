@@ -22,7 +22,7 @@ function isAdminMiddleware(req, res, next){
 router.get('/', (req, res) => {
   Planet
     .find()
-    .then(planets => res.json(planets));
+    .then(planets => res.status(200).json(planets));
 });
 
 router.get('/:id', (req, res) => {
