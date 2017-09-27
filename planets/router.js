@@ -9,22 +9,24 @@ const passport = require('passport');
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 function isAdminMiddleware(req, res, next){
-  // if(req.user && req.user.isAdmin){
-  //   next(); 
-  // }
-  // else {
-  //   console.log(req.user)
-  //   res.status(403).json({message: 'There was a problem'}); 
-  // }
+  if(req.user && req.user.isAdmin){
+    next(); 
+  }
+  else {
+    console.log(req.user)
+    res.status(403).json({message: 'There was a problem'}); 
+  }
   next(); 
 }
 
+// Anyone Get
 router.get('/', (req, res) => {
   Planet
     .find()
     .then(planets => res.status(200).json(planets));
 });
 
+// Anyone Get
 router.get('/:id', (req, res) => {
   Planet
     .findById(req.params.id)
@@ -71,6 +73,7 @@ router.delete('/:planetId/comment/:commentId', jwtAuth, (req, res) => {
     });
 });
 
+// User Put
 router.put('/:planetId/comment/:commentId', jsonParser, jwtAuth, (req, res) => {
   const updatedComment = req.body.content;
   Planet
@@ -107,6 +110,7 @@ router.post('/', jsonParser, jwtAuth, isAdminMiddleware, (req, res) => {
     });
 });
 
+// Admin Put
 router.put('/:id', jsonParser, jwtAuth, isAdminMiddleware, (req, res) => {
   if(!(req.params.id || req.body.id || req.params.id === req.body.id)){
     res.status(500).json({error: 'Something went wrong'});
@@ -122,6 +126,7 @@ router.put('/:id', jsonParser, jwtAuth, isAdminMiddleware, (req, res) => {
     });
 });
 
+// Admin Delete
 router.delete('/:id', jwtAuth, isAdminMiddleware, (req, res) => {
   Planet
     .findByIdAndRemove(req.params.id)
