@@ -47,7 +47,8 @@ function seedData(){
 
 describe('Planet endpoint', function(){
     const username = 'exampleUser'; 
-    const password = 'examplePass'; 
+    const password = 'examplePass';
+    let hash = null; 
 
     before(function(){
         return runServer()
@@ -58,7 +59,8 @@ describe('Planet endpoint', function(){
     }); 
 
     beforeEach(async function(){
-        await User.create({ username, password: await User.hashPassword(password) });
+        if (!hash) hash = await User.hashPassword(password)
+        await User.create({ username, password: hash });
         await seedData(); 
     }); 
 
@@ -106,13 +108,13 @@ describe('Planet endpoint', function(){
                     res.should.have.status(200);
                     res.should.be.json;
                     res.body.should.be.an('object');
-                    res.should.include.keys("_id", "name", "description", "composition", "thumbnail", "moons", "comments");
-                    res._id.should.not.be.null;
-                    res.moons.forEach(function(moon) {
+                    res.body.should.include.keys("_id", "name", "description", "composition", "thumbnail", "moons", "comments");
+                    res.body._id.should.not.be.null;
+                    res.body.moons.forEach(function(moon) {
                         moon.should.be.an('object');
                         moon.should.include.keys("_id", "name");
                         moon._id.should.not.be.null;
-                    res.comments.forEach(function(comment) {
+                    res.body.comments.forEach(function(comment) {
                         comment.should.be.an('object');
                         comment.should.include.keys("_id", "username", "content", "created");
                         comment._id.should.not.be.null;
@@ -122,5 +124,33 @@ describe('Planet endpoint', function(){
 
                 }); 
         });
+
+        it('PUT ID should push a comment to the comments section WITH credentials', function() {
+
+            const token = jwt.sign(
+                {
+                  user: { username }
+                },
+                JWT_SECRET,
+                {
+                  // algorithm: 'HS256',
+                  subject: username,
+                  expiresIn: '7d'
+                }
+              );
+
+            return chai
+                .request(app)
+                .post(`api/planets/${randomId}/comment`)
+                .set('Authorization', `Bearer ${token}`)
+                .send({
+                    content: faker.lorem.paragraph(),
+                    username: req.headers.username
+                })
+                .then(function(res) {
+                    res.should.have.status(201)
+                })
+        
+        })
     });
 }); 

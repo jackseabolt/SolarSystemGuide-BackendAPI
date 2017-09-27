@@ -54,7 +54,7 @@ router.post('/:planetId/comment', jsonParser, jwtAuth, (req, res) => {
       { _id: req.params.planetId},
       { $push: { comments: newComment}}
     )
-    .then(planet => res.sendStatus(204))
+    .then(planet => res.sendStatus(201))
     .catch(err => {
       console.error(err);
       res.status(500).json({error: 'Something screwed up'});
