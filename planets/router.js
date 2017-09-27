@@ -38,8 +38,11 @@ router.get('/:id', (req, res) => {
 });
 
 // User Post 
-router.post('/comment/:planetId', jsonParser, (req, res) => {
-  const newComment = req.body;
+router.post('/:planetId/comment', jsonParser, jwtAuth, (req, res) => {
+  const newComment = {
+    content: req.body.content,
+    username: req.user.username
+  };
   Planet
     .update(
       { _id: req.params.planetId},
@@ -52,7 +55,37 @@ router.post('/comment/:planetId', jsonParser, (req, res) => {
     });
 });
 
-// router.put('/comment/:planetIt/:id')
+// User Delete
+router.delete('/:planetId/comment/:commentId', jwtAuth, (req, res) => {
+  Planet
+    .findByIdAndUpdate(
+      {_id: req.params.planetId},
+      { $pull: {comments: {_id : req.params.commentId}}}
+    )
+    .then(response => {
+      res.sendStatus(204); 
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({error: 'Something went wrong'});
+    });
+});
+
+router.put('/:planetId/comment/:commentId', jsonParser, jwtAuth, (req, res) => {
+  const updatedComment = req.body.content;
+  Planet
+    .findOneAndUpdate(
+      {_id: req.params.planetId, 'comments._id': req.params.commentId},
+      {'comments.$.content': updatedComment}
+    )
+    .then(response => {
+      res.sendStatus(204); 
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({error: 'Something went wrong'});
+    });
+});
 
 // Admin Post
 router.post('/', jsonParser, jwtAuth, isAdminMiddleware, (req, res) => {
