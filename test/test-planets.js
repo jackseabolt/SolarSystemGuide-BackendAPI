@@ -18,9 +18,11 @@ const should = chai.should();
 
 chai.use(chaiHttp); 
 
+let randomId;
+
 function seedData(){
     const arr = []; 
-    for(let i = 1; i < 5; i++){
+    for(let i = 1; i <= 5; i++){
         arr.push({
             name: faker.lorem.word(), 
             description: faker.lorem.paragraph(),  
@@ -39,7 +41,8 @@ function seedData(){
             ]
         });
     }
-    return Planet.insertMany(arr); 
+    return Planet.insertMany(arr)
+    .then(function(res) {randomId=res[0]._id})
 }
 
 describe('Planet endpoint', function(){
@@ -54,11 +57,9 @@ describe('Planet endpoint', function(){
         return closeServer(); 
     }); 
 
-    beforeEach(function(){
-        return User.hashPassword(password).then(password => {
-            User.create({ username, password });
-            seedData(); 
-        });
+    beforeEach(async function(){
+        await User.create({ username, password: await User.hashPassword(password) });
+        await seedData(); 
     }); 
 
     afterEach(async function(){
@@ -66,17 +67,60 @@ describe('Planet endpoint', function(){
         await User.remove({}) 
     }); 
 
-    let res; 
-
     describe('/api/planets', function(){
         it('GET should return all planets with no credentials', function(){
             return chai 
                 .request(app)
                 .get('/api/planets')
-                .then(_res => {
-                    res = _res; 
-                    res.should.have.status(200); 
+                .then(res => {
+                    res.should.have.status(200);
+                    res.should.be.json;
+                    res.body.should.be.an('array');
+                    res.body.length.should.equal(5);
+                    res.body.forEach(function(planet) {
+                            planet.should.be.an('object');
+                            planet.should.include.keys("_id", "name", "description", "composition", "thumbnail", "moons", "comments");
+                            planet._id.should.not.be.null;
+                            planet.moons.forEach(function(moon) {
+                                moon.should.be.an('object');
+                                moon.should.include.keys("_id", "name");
+                                moon._id.should.not.be.null;
+                            planet.comments.forEach(function(comment) {
+                                comment.should.be.an('object');
+                                comment.should.include.keys("_id", "username", "content", "created");
+                                comment._id.should.not.be.null;
+                                comment.created.should.not.be.null;
+                            })
+                            })
+
+                        })
                 })
         })
-    }); 
+
+        it('GET ID should return a single planet with no credentials', function() {
+            return chai
+                .request(app)
+                .get(`/api/planets/${randomId}`)
+                .then(function(res) {
+                    console.log(res.body)
+                    res.should.have.status(200);
+                    res.should.be.json;
+                    res.body.should.be.an('object');
+                    res.should.include.keys("_id", "name", "description", "composition", "thumbnail", "moons", "comments");
+                    res._id.should.not.be.null;
+                    res.moons.forEach(function(moon) {
+                        moon.should.be.an('object');
+                        moon.should.include.keys("_id", "name");
+                        moon._id.should.not.be.null;
+                    res.comments.forEach(function(comment) {
+                        comment.should.be.an('object');
+                        comment.should.include.keys("_id", "username", "content", "created");
+                        comment._id.should.not.be.null;
+                        comment.created.should.not.be.null;
+                    })  
+                    })
+
+                }); 
+        });
+    });
 }); 

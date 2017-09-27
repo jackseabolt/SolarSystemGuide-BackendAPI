@@ -31,7 +31,11 @@ router.get('/:id', (req, res) => {
   Planet
     .findById(req.params.id)
     .then(planet => {
-      res.status(200).json(planet);
+      console.log(planet, 'THIS IS A CONSOLE LOG OF PLANET');
+      if(!planet) {
+        res.sendStatus(404);
+      }
+      else res.status(200).json(planet);
     })
     .catch(err => {
       console.error(err);
