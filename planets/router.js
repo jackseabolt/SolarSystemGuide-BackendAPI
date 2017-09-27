@@ -29,14 +29,32 @@ router.get('/:id', (req, res) => {
   Planet
     .findById(req.params.id)
     .then(planet => {
-      res.status(200).json(planet)
+      res.status(200).json(planet);
     })
     .catch(err => {
       console.error(err);
       res.status(500).json({error: 'Something went wrong'}); 
-    })
-})
+    });
+});
 
+// User Post 
+router.post('/comment/:planetId', jsonParser, (req, res) => {
+  const newComment = req.body;
+  Planet
+    .update(
+      { _id: req.params.planetId},
+      { $push: { comments: newComment}}
+    )
+    .then(planet => res.sendStatus(204))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({error: 'Something screwed up'});
+    });
+});
+
+// router.put('/comment/:planetIt/:id')
+
+// Admin Post
 router.post('/', jsonParser, jwtAuth, isAdminMiddleware, (req, res) => {
   const newPlanet = { 
     name: req.body.name,
@@ -57,8 +75,8 @@ router.post('/', jsonParser, jwtAuth, isAdminMiddleware, (req, res) => {
 });
 
 router.put('/:id', jsonParser, jwtAuth, isAdminMiddleware, (req, res) => {
-  if(!(req.params.id || req.body.id || req.params.id == req.body.id)){
-    res.status(500).json({error: 'Something went wrong'})
+  if(!(req.params.id || req.body.id || req.params.id === req.body.id)){
+    res.status(500).json({error: 'Something went wrong'});
   }
   Planet 
     .findByIdAndUpdate(req.params.id, {$set: req.body})
@@ -68,16 +86,16 @@ router.put('/:id', jsonParser, jwtAuth, isAdminMiddleware, (req, res) => {
     .catch(err => {
       console.error(err); 
       res.status(500).json({error: 'Something went wrong'}); 
-    })
-})
+    });
+});
 
 router.delete('/:id', jwtAuth, isAdminMiddleware, (req, res) => {
   Planet
     .findByIdAndRemove(req.params.id)
     .then(response => {
       res.sendStatus(204); 
-    })
-})
+    });
+});
 
 
 module.exports = { router };
