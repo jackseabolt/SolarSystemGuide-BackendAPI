@@ -181,8 +181,6 @@ describe('Planet endpoint', function(){
                                 .findOne({_id: randomId})
                                 .then(planet => {
                                     planet.comments.forEach(function(comment){
-                                        console.log(typeof comment._id, " this is comment._id")
-                                        console.log(typeof deleteMe, " this is deleteMe")
                                         comment._id.toString().should.not.equal(deleteMe)
                                     })
                                 })
