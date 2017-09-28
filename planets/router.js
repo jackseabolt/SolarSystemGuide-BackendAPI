@@ -16,7 +16,6 @@ function isAdminMiddleware(req, res, next){
     console.log(req.user)
     res.status(403).json({message: 'There was a problem'}); 
   }
-  next(); 
 }
 
 // Anyone Get
@@ -106,9 +105,10 @@ router.post('/', jsonParser, jwtAuth, isAdminMiddleware, (req, res) => {
 
   Planet
     .create(newPlanet)
-    .then(planet => res.status(201).json(planet))
+    .then(planet => {
+      res.status(201).json(planet)
+    })
     .catch(err => {
-      console.error(err);
       res.status(500).json({error: 'Something went wrong'});
     });
 });

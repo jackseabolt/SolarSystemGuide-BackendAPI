@@ -66,7 +66,17 @@ describe('Planet endpoint', function(){
           expiresIn: '7d'
         }
       );
-
+    const adminToken = jwt.sign(
+        {
+          user: { username: 'admin', isAdmin: true}
+        },
+        JWT_SECRET,
+        {
+          // algorithm: 'HS256',
+          subject: 'admin',
+          expiresIn: '7d'
+        }
+      );
     before(function(){
         return runServer()
     });
@@ -78,6 +88,7 @@ describe('Planet endpoint', function(){
     beforeEach(async function(){
         if (!hash) hash = await User.hashPassword(password)
         await User.create({ username, password: hash });
+        await User.create({ username: 'admin', password: hash, isAdmin: true });
         await seedData(); 
     }); 
 
@@ -217,5 +228,48 @@ describe('Planet endpoint', function(){
                         })
                 })
         }); 
+
+        it('POST without admin will be rejected', function(){
+            return chai
+                .request(app)
+                .post('/api/planets/')
+                .set('authorization', `Bearer ${token}`)
+                .then(function(res){
+                    res.should.not.have.status(201); 
+                })
+                .catch(function(err){
+                    err.should.have.status(403); 
+                });
+        })
+
+        it('POST with admin will be accepted', function(){
+            return chai
+                .request(app)
+                .post('/api/planets/')
+                .set('authorization', `Bearer ${adminToken}`)
+                .send({
+                    name: "Caseytopia", 
+                    description: faker.lorem.paragraph(),  
+                    composition: faker.lorem.words(),
+                    thumbnail: faker.image.imageUrl(), 
+                    moons: [
+                        {
+                            name: faker.lorem.word() 
+                        }
+                    ],
+                    comments: [
+                        {
+                            content: faker.lorem.paragraph(),
+                            username: faker.internet.userName()
+                        }
+                    ]
+                })
+                .then(function(res){
+                    res.should.have.status(201); 
+                })
+                .catch(function(err){
+                    console.error("THE ERROR HAPPENED"); 
+                })
+        })
     });
 }); 
