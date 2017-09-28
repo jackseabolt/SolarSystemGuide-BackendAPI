@@ -21,10 +21,12 @@ chai.use(chaiHttp);
 let randomId;
 
 function seedData(){
+    const seedPlanets = ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter']; 
+
     const arr = []; 
     for(let i = 1; i <= 5; i++){
         arr.push({
-            name: faker.lorem.word(), 
+            name: seedPlanets.pop(), 
             description: faker.lorem.paragraph(),  
             composition: faker.lorem.words(),
             thumbnail: faker.image.imageUrl(), 
@@ -49,6 +51,17 @@ describe('Planet endpoint', function(){
     const username = 'exampleUser'; 
     const password = 'examplePass';
     let hash = null; 
+    const token = jwt.sign(
+        {
+          user: { username }
+        },
+        JWT_SECRET,
+        {
+          // algorithm: 'HS256',
+          subject: username,
+          expiresIn: '7d'
+        }
+      );
 
     before(function(){
         return runServer()
@@ -68,6 +81,13 @@ describe('Planet endpoint', function(){
         await Planet.remove({}); 
         await User.remove({}) 
     }); 
+
+    // afterEach(function () {
+    //     return Planet.remove({})
+    //         .then(() => {
+    //             return User.remove({})
+    //         }); 
+    // });
 
     describe('/api/planets', function(){
         it('GET should return all planets with no credentials', function(){
@@ -125,32 +145,47 @@ describe('Planet endpoint', function(){
                 }); 
         });
 
-        // it('PUT ID should push a comment to the comments section WITH credentials', function() {
+        it('PUT ID should push a comment to the comments section WITH credentials', function() {
+            return chai
+                .request(app)
+                .post(`/api/planets/${randomId}/comment`)
+                .set('authorization', `Bearer ${token}`)
+                .send({
+                    content: faker.lorem.paragraph(),
+                })
+                .then(function(res) {
+                    res.should.have.status(201)
+                }); 
+        });
 
-        //     const token = jwt.sign(
-        //         {
-        //           user: { username }
-        //         },
-        //         JWT_SECRET,
-        //         {
-        //           // algorithm: 'HS256',
-        //           subject: username,
-        //           expiresIn: '7d'
-        //         }
-        //       );
-
-        //     return chai
-        //         .request(app)
-        //         .post(`api/planets/${randomId}/comment`)
-        //         .set('Authorization', `Bearer ${token}`)
-        //         .send({
-        //             content: faker.lorem.paragraph(),
-        //             username: req.headers.username
-        //         })
-        //         .then(function(res) {
-        //             res.should.have.status(201)
-        //         })
-        
-        // })
+        it('DELETE PLNT ID + CMMT ID will delete a comment from a planet', function(){
+            let res; 
+            return chai
+                .request(app)
+                .get(`/api/planets/${randomId}`)
+                .then(function(_res) {
+                    res = _res
+                })
+                // .then(function() {
+                //     return chai
+                //         .request(app)
+                //         .delete(`/api/planets/${randomId}/comment/${res.body.comments[0]._id}`)
+                //         .set('authorization', `Bearer ${token}`)
+                //         .then(function(res) {
+                //             res.should.have.status(204); 
+                //         })
+                        .then(function(){
+                            Planet
+                                .findOne({_id: randomId})
+                                .then(planet => {
+                                    planet.comments.forEach(function(comment){
+                                        console.log(comment._id + " this is comment._id ")
+                                        console.log(res.body.comments[0]._id + " this is res.body.comments")
+                                        comment._id.should.not.equal(res.body.comments[0]._id)
+                                    })
+                                })
+                        })
+                // })
+        }); 
     });
 }); 
