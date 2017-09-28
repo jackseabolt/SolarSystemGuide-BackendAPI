@@ -158,18 +158,20 @@ describe('Planet endpoint', function(){
                 }); 
         });
 
-        it('DELETE PLNT ID + CMMT ID will delete a comment from a planet', function(){
+        it.only('DELETE PLNT ID + CMMT ID will delete a comment from a planet', function(){
             let res; 
+            let deleteMe; 
             return chai
                 .request(app)
                 .get(`/api/planets/${randomId}`)
                 .then(function(_res) {
                     res = _res
+                    deleteMe = res.body.comments[0]._id; 
                 })
                 // .then(function() {
                 //     return chai
                 //         .request(app)
-                //         .delete(`/api/planets/${randomId}/comment/${res.body.comments[0]._id}`)
+                //         .delete(`/api/planets/${randomId}/comment/${deleteMe}`)
                 //         .set('authorization', `Bearer ${token}`)
                 //         .then(function(res) {
                 //             res.should.have.status(204); 
@@ -179,9 +181,9 @@ describe('Planet endpoint', function(){
                                 .findOne({_id: randomId})
                                 .then(planet => {
                                     planet.comments.forEach(function(comment){
-                                        console.log(comment._id + " this is comment._id ")
-                                        console.log(res.body.comments[0]._id + " this is res.body.comments")
-                                        comment._id.should.not.equal(res.body.comments[0]._id)
+                                        console.log(comment._id, " this is comment._id")
+                                        console.log(deleteMe, " this is deleteMe")
+                                        comment._id.should.not.equal(deleteMe)
                                     })
                                 })
                         })

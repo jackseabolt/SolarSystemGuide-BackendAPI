@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "nyc mocha test/test-planets.js"
+    "test": "mocha test/test-planets.js"
   },
   "keywords": [],
   "author": "",
