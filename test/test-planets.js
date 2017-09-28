@@ -177,7 +177,7 @@ describe('Planet endpoint', function(){
                 //             res.should.have.status(204); 
                 //         })
                         .then(function(){
-                            Planet
+                            return Planet
                                 .findOne({_id: randomId})
                                 .then(planet => {
                                     planet.comments.forEach(function(comment){
