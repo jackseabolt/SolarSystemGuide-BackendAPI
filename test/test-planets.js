@@ -158,7 +158,7 @@ describe('Planet endpoint', function(){
                 }); 
         });
 
-        it.only('DELETE PLNT ID + CMMT ID will delete a comment from a planet', function(){
+        it('DELETE PLNT ID + CMMT ID will delete a comment from a planet', function(){
             let res; 
             let deleteMe; 
             return chai
@@ -184,8 +184,8 @@ describe('Planet endpoint', function(){
                                         comment._id.toString().should.not.equal(deleteMe)
                                     })
                                 })
-                        })
-                })
+                        });
+                });
         }); 
     });
 }); 
