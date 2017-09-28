@@ -125,32 +125,32 @@ describe('Planet endpoint', function(){
                 }); 
         });
 
-        it('PUT ID should push a comment to the comments section WITH credentials', function() {
+        // it('PUT ID should push a comment to the comments section WITH credentials', function() {
 
-            const token = jwt.sign(
-                {
-                  user: { username }
-                },
-                JWT_SECRET,
-                {
-                  // algorithm: 'HS256',
-                  subject: username,
-                  expiresIn: '7d'
-                }
-              );
+        //     const token = jwt.sign(
+        //         {
+        //           user: { username }
+        //         },
+        //         JWT_SECRET,
+        //         {
+        //           // algorithm: 'HS256',
+        //           subject: username,
+        //           expiresIn: '7d'
+        //         }
+        //       );
 
-            return chai
-                .request(app)
-                .post(`api/planets/${randomId}/comment`)
-                .set('Authorization', `Bearer ${token}`)
-                .send({
-                    content: faker.lorem.paragraph(),
-                    username: req.headers.username
-                })
-                .then(function(res) {
-                    res.should.have.status(201)
-                })
+        //     return chai
+        //         .request(app)
+        //         .post(`api/planets/${randomId}/comment`)
+        //         .set('Authorization', `Bearer ${token}`)
+        //         .send({
+        //             content: faker.lorem.paragraph(),
+        //             username: req.headers.username
+        //         })
+        //         .then(function(res) {
+        //             res.should.have.status(201)
+        //         })
         
-        })
+        // })
     });
 }); 
