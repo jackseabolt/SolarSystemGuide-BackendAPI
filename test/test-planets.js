@@ -168,14 +168,14 @@ describe('Planet endpoint', function(){
                     res = _res
                     deleteMe = res.body.comments[0]._id; 
                 })
-                // .then(function() {
-                //     return chai
-                //         .request(app)
-                //         .delete(`/api/planets/${randomId}/comment/${deleteMe}`)
-                //         .set('authorization', `Bearer ${token}`)
-                //         .then(function(res) {
-                //             res.should.have.status(204); 
-                //         })
+                .then(function() {
+                    return chai
+                        .request(app)
+                        .delete(`/api/planets/${randomId}/comment/${deleteMe}`)
+                        .set('authorization', `Bearer ${token}`)
+                        .then(function(res) {
+                            res.should.have.status(204); 
+                        })
                         .then(function(){
                             return Planet
                                 .findOne({_id: randomId})
@@ -187,7 +187,7 @@ describe('Planet endpoint', function(){
                                     })
                                 })
                         })
-                // })
+                })
         }); 
     });
 }); 
