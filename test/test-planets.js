@@ -106,13 +106,13 @@ describe('Planet endpoint', function(){
                     res.should.have.status(200);
                     res.should.be.json;
                     res.body.should.be.an('object');
-                    res.should.include.keys("_id", "name", "description", "composition", "thumbnail", "moons", "comments");
-                    res._id.should.not.be.null;
-                    res.moons.forEach(function(moon) {
+                    res.body.should.include.keys("_id", "name", "description", "composition", "thumbnail", "moons", "comments");
+                    res.body._id.should.not.be.null;
+                    res.body.moons.forEach(function(moon) {
                         moon.should.be.an('object');
                         moon.should.include.keys("_id", "name");
                         moon._id.should.not.be.null;
-                    res.comments.forEach(function(comment) {
+                    res.body.comments.forEach(function(comment) {
                         comment.should.be.an('object');
                         comment.should.include.keys("_id", "username", "content", "created");
                         comment._id.should.not.be.null;
