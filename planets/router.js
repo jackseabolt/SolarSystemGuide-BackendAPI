@@ -31,7 +31,6 @@ router.get('/:id', (req, res) => {
   Planet
     .findById(req.params.id)
     .then(planet => {
-      console.log(planet, 'THIS IS A CONSOLE LOG OF PLANET');
       if(!planet) {
         res.sendStatus(404);
       }

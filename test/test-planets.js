@@ -19,6 +19,7 @@ const should = chai.should();
 chai.use(chaiHttp); 
 
 let randomId;
+let commentId; 
 
 function seedData(){
     const seedPlanets = ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter']; 
@@ -44,7 +45,10 @@ function seedData(){
         });
     }
     return Planet.insertMany(arr)
-    .then(function(res) {randomId=res[0]._id})
+    .then(function(res) {
+        randomId=res[0]._id
+        commentId=res[0].comments[0]._id; 
+    })
 }
 
 describe('Planet endpoint', function(){
@@ -124,7 +128,6 @@ describe('Planet endpoint', function(){
                 .request(app)
                 .get(`/api/planets/${randomId}`)
                 .then(function(res) {
-                    console.log(res.body)
                     res.should.have.status(200);
                     res.should.be.json;
                     res.body.should.be.an('object');
@@ -145,47 +148,74 @@ describe('Planet endpoint', function(){
                 }); 
         });
 
-        it('PUT ID should push a comment to the comments section WITH credentials', function() {
+        it('POST ID should push a comment to the comments section WITH credentials', function() {
             return chai
                 .request(app)
                 .post(`/api/planets/${randomId}/comment`)
                 .set('authorization', `Bearer ${token}`)
                 .send({
-                    content: faker.lorem.paragraph(),
+                    content: 'testcontent',
                 })
                 .then(function(res) {
                     res.should.have.status(201)
-                }); 
+                })
+                .then(function(){
+                    return Planet 
+                        .findOne({_id: randomId})
+                        .then(planet => {
+                            let matching_comments = 0; 
+                            planet.comments.forEach(function(comment){
+                                should.exist(comment._id);
+                                should.exist(comment.username);
+                                should.exist(comment.content);
+                                should.exist(comment.created);
+                                if(comment.content === "testcontent"){
+                                    matching_comments++; 
+                                    comment.username.should.equal(username);
+                                }  
+                            })
+                            matching_comments.should.equal(1);  
+                        })
+                }) 
         });
 
         it('DELETE PLNT ID + CMMT ID will delete a comment from a planet', function(){
-            let res; 
-            let deleteMe; 
             return chai
                 .request(app)
-                .get(`/api/planets/${randomId}`)
-                .then(function(_res) {
-                    res = _res
-                    deleteMe = res.body.comments[0]._id; 
+                .delete(`/api/planets/${randomId}/comment/${commentId}`)
+                .set('authorization', `Bearer ${token}`)
+                .then(function (res) {
+                    res.should.have.status(204);
                 })
-                .then(function() {
-                    return chai
-                        .request(app)
-                        .delete(`/api/planets/${randomId}/comment/${deleteMe}`)
-                        .set('authorization', `Bearer ${token}`)
-                        .then(function(res) {
-                            res.should.have.status(204); 
+                .then(function () {
+                    return Planet
+                        .findOne({ _id: randomId })
+                        .then(planet => {
+                            planet.comments.forEach(function (comment) {
+                                comment._id.toString().should.not.equal(commentId)
+                            })
                         })
-                        .then(function(){
-                            return Planet
-                                .findOne({_id: randomId})
-                                .then(planet => {
-                                    planet.comments.forEach(function(comment){
-                                        comment._id.toString().should.not.equal(deleteMe)
-                                    })
-                                })
-                        });
-                });
+                });  
+        });
+        
+        it('PUT PLNT ID + CMMT ID will update a user comment', function(){
+            return chai
+                .request(app)
+                .put(`/api/planets/${randomId}/comment/${commentId}`)
+                .set('authorization', `Bearer ${token}`)
+                .send({
+                    content: "testcontent",
+                })
+                .then(function(res){
+                    res.should.have.status(204); 
+                })
+                .then(function(){
+                    return Planet 
+                        .findOne({_id: randomId})
+                        .then(planet => {
+                            planet.comments[0].content.should.equal("testcontent")
+                        })
+                })
         }); 
     });
 }); 
