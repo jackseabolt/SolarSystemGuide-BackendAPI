@@ -195,16 +195,14 @@ describe('Planet endpoint', function(){
                 .set('authorization', `Bearer ${token}`)
                 .then(function (res) {
                     res.should.have.status(204);
-                })
-                .then(function () {
                     return Planet
                         .findOne({ _id: randomId })
-                        .then(planet => {
-                            planet.comments.forEach(function (comment) {
-                                comment._id.toString().should.not.equal(commentId)
-                            })
-                        })
-                });  
+                })
+                .then(planet => {
+                    planet.comments.forEach(function (comment) {
+                        comment._id.toString().should.not.equal(commentId)
+                    })
+                });                 
         });
         
         it('PUT PLNT ID + CMMT ID will update a user comment', function(){
@@ -217,13 +215,11 @@ describe('Planet endpoint', function(){
                 })
                 .then(function(res){
                     res.should.have.status(204); 
-                })
-                .then(function(){
                     return Planet 
                         .findOne({_id: randomId})
-                        .then(planet => {
-                            planet.comments[0].content.should.equal("testcontent")
-                        })
+                })
+                .then(planet => {
+                    planet.comments[0].content.should.equal("testcontent")                       
                 })
         }); 
 
@@ -291,21 +287,7 @@ describe('Planet endpoint', function(){
                 .set('authorization', `Bearer ${adminToken}`)
                 .send({
                     id: randomId,
-                    name: "JackAndJill", //unique to our test
-                    description: faker.lorem.paragraph(),  
-                    composition: faker.lorem.words(),
-                    thumbnail: faker.image.imageUrl(), 
-                    moons: [
-                        {
-                            name: faker.lorem.word() 
-                        }
-                    ],
-                    comments: [
-                        {
-                            content: faker.lorem.paragraph(),
-                            username: faker.internet.userName()
-                        }
-                    ]
+                    name: "JackAndJill" //unique to our test
                 })
                 .then(function(res){
                     res.should.have.status(204); 
@@ -316,7 +298,7 @@ describe('Planet endpoint', function(){
                 })
         })
 
-        it('DELETE Authenticated User with admin will be rejected', function(){
+        it('DELETE Authenticated User without admin will be rejected', function(){
             return chai
                 .request(app)
                 .delete(`/api/planets/${randomId}`)
@@ -338,8 +320,8 @@ describe('Planet endpoint', function(){
                     res.should.have.status(204)
                     return Planet.findOne({_id: randomId})
                 })
-                .then(function(res){
-                    should.not.exist(res)
+                .then(function(planet){
+                    should.not.exist(planet)
                 })
         });
     });
