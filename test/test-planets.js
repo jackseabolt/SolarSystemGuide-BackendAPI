@@ -154,7 +154,6 @@ describe('Planet endpoint', function(){
                         comment.created.should.not.be.null;
                     })  
                     })
-
                 }); 
         });
 

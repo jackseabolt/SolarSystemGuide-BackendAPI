@@ -30,10 +30,7 @@ router.get('/:id', (req, res) => {
   Planet
     .findById(req.params.id)
     .then(planet => {
-      if(!planet) {
-        res.sendStatus(404);
-      }
-      else res.status(200).json(planet);
+      res.status(200).json(planet);
     })
     .catch(err => {
       console.error(err);
