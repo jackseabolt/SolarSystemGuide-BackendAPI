@@ -271,7 +271,7 @@ describe('Planet endpoint', function(){
                 })                
         })
 
-        it('PUT Authetnicated user without admin will be rejected', function(){
+        it('PUT Authenticated user without admin will be rejected', function(){
             return chai
                 .request(app)
                 .put(`/api/planets/${randomId}`)
