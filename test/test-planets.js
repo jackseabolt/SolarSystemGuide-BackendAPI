@@ -282,7 +282,7 @@ describe('Planet endpoint', function(){
                 })
                 .catch(function(err){
                     err.should.have.status(403); 
-            });
+                });
         });
 
         it('PUT Authenticated User with admin will be accepted', function(){
@@ -317,7 +317,31 @@ describe('Planet endpoint', function(){
                 })
         })
 
+        it('DELETE Authenticated User with admin will be rejected', function(){
+            return chai
+                .request(app)
+                .delete(`/api/planets/${randomId}`)
+                .set('authorization', `Bearer ${token}`)
+                .then(function(res){
+                    res.should.not.have.status(204); 
+                })
+                .catch(function(err){
+                    err.should.have.status(403); 
+                });
+        })
+
+        it('DELETE Authenticated User with admin will be accepted', function(){
+            return chai
+                .request(app)
+                .delete(`/api/planets/${randomId}`)
+                .set('authorization', `Bearer ${adminToken}`)
+                .then(function(res){
+                    res.should.have.status(204)
+                    return Planet.findOne({_id: randomId})
+                })
+                .then(function(res){
+                    should.not.exist(res)
+                })
+        });
     });
 }); 
-
-
