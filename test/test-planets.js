@@ -129,8 +129,7 @@ describe('Planet endpoint', function(){
                                 comment.created.should.not.be.null;
                             })
                             })
-
-                        })
+                    })
                 })
         })
 
@@ -270,8 +269,7 @@ describe('Planet endpoint', function(){
                 })
                 .then(function(res){
                     res.length.should.equal(1);
-                })
-                
+                })                
         })
 
         it('PUT Authetnicated user without admin will be rejected', function(){
@@ -315,9 +313,7 @@ describe('Planet endpoint', function(){
                     return Planet.find( {name: "JackAndJill"})
                 })
                 .then(function(res){
-                    res.length.should.equal(1);
-                    
-                        
+                    res.length.should.equal(1);                                           
                 })
         })
 
