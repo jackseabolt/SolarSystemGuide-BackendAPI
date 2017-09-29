@@ -6,15 +6,15 @@ Allows general users to retreive solar system data from a database.
 
 #### https://solarsystem-api.herokuapp.com/api/planets
 GET Request to this route will return a list of all the planets in the solar system with details. 
-
+<br><br>
 
 #### https://solarsystem-api.herokuapp.com/api/planets/:planetId
 GET Request to this route will return a single planet with details.
-
+<br><br>
 
 #### https://solarsystem-api.herokuapp.com/api/planets/:planetId/comments
 POST Request to this route (Authenticated Users Only) will allow users to POST comments to a planetId. 
-
+<br><br>
 
 #### https://solarsystem-api.herokuapp.com/api/planets/:planetId/comments/:commentId
 PUT Request to this route (Authenticated Users Only) will allow users to EDIT their comments to a planetId. 
