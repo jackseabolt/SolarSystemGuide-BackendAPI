@@ -13,7 +13,6 @@ function isAdminMiddleware(req, res, next){
     next(); 
   }
   else {
-    console.log(req.user)
     res.status(403).json({message: 'There was a problem'}); 
   }
 }
@@ -32,8 +31,7 @@ router.get('/:id', (req, res) => {
     .then(planet => {
       res.status(200).json(planet);
     })
-    .catch(err => {
-      console.error(err);
+    .catch(() => {
       res.status(500).json({error: 'Something went wrong'}); 
     });
 });
@@ -50,8 +48,7 @@ router.post('/:planetId/comment', jsonParser, jwtAuth, (req, res) => {
       { $push: { comments: newComment}}
     )
     .then(planet => res.sendStatus(201))
-    .catch(err => {
-      console.error(err);
+    .catch(() => {
       res.status(500).json({error: 'Something screwed up'});
     });
 });
@@ -66,8 +63,7 @@ router.delete('/:planetId/comment/:commentId', jwtAuth, (req, res) => {
     .then(response => {
       res.sendStatus(204); 
     })
-    .catch(err => {
-      console.error(err);
+    .catch(() => {
       res.status(500).json({error: 'Something went wrong'});
     });
 });
@@ -83,8 +79,7 @@ router.put('/:planetId/comment/:commentId', jsonParser, jwtAuth, (req, res) => {
     .then(response => {
       res.sendStatus(204); 
     })
-    .catch(err => {
-      console.error(err);
+    .catch(() => {
       res.status(500).json({error: 'Something went wrong'});
     });
 });
@@ -105,7 +100,7 @@ router.post('/', jsonParser, jwtAuth, isAdminMiddleware, (req, res) => {
     .then(planet => {
       res.status(201).json(planet)
     })
-    .catch(err => {
+    .catch(() => {
       res.status(500).json({error: 'Something went wrong'});
     });
 });
@@ -120,8 +115,7 @@ router.put('/:id', jsonParser, jwtAuth, isAdminMiddleware, (req, res) => {
     .then(planet => {
       res.sendStatus(204); 
     })
-    .catch(err => {
-      console.error(err); 
+    .catch(() => {
       res.status(500).json({error: 'Something went wrong'}); 
     });
 });
@@ -130,7 +124,7 @@ router.put('/:id', jsonParser, jwtAuth, isAdminMiddleware, (req, res) => {
 router.delete('/:id', jwtAuth, isAdminMiddleware, (req, res) => {
   Planet
     .findByIdAndRemove(req.params.id)
-    .then(response => {
+    .then(() => {
       res.sendStatus(204); 
     });
 });
