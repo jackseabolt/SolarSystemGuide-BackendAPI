@@ -173,21 +173,21 @@ describe('Planet endpoint', function(){
                 .then(function(){
                     return Planet 
                         .findOne({_id: randomId})
-                        .then(planet => {
-                            let matching_comments = 0; 
-                            planet.comments.forEach(function(comment){
-                                should.exist(comment._id);
-                                should.exist(comment.username);
-                                should.exist(comment.content);
-                                should.exist(comment.created);
-                                if(comment.content === "testcontent"){
-                                    matching_comments++; 
-                                    comment.username.should.equal(username);
-                                }  
-                            })
-                            matching_comments.should.equal(1);  
-                        })
-                }) 
+                })
+                .then(planet => {
+                    let matching_comments = 0; 
+                    planet.comments.forEach(function(comment){
+                        should.exist(comment._id);
+                        should.exist(comment.username);
+                        should.exist(comment.content);
+                        should.exist(comment.created);
+                        if(comment.content === "testcontent"){
+                            matching_comments++; 
+                            comment.username.should.equal(username);
+                        }  
+                    })
+                    matching_comments.should.equal(1);  
+                })       
         });
 
         it('DELETE PLNT ID + CMMT ID will delete a comment from a planet', function(){
@@ -229,7 +229,7 @@ describe('Planet endpoint', function(){
                 })
         }); 
 
-        it('POST without admin will be rejected', function(){
+        it('POST Authenticated User without admin will be rejected', function(){
             return chai
                 .request(app)
                 .post('/api/planets/')
@@ -242,13 +242,13 @@ describe('Planet endpoint', function(){
                 });
         })
 
-        it('POST with admin will be accepted', function(){
+        it('POST Authenticated User with admin will be accepted', function(){
             return chai
                 .request(app)
                 .post('/api/planets/')
                 .set('authorization', `Bearer ${adminToken}`)
                 .send({
-                    name: "Caseytopia", 
+                    name: "Caseytopia", //unique to our test
                     description: faker.lorem.paragraph(),  
                     composition: faker.lorem.words(),
                     thumbnail: faker.image.imageUrl(), 
@@ -265,11 +265,63 @@ describe('Planet endpoint', function(){
                     ]
                 })
                 .then(function(res){
-                    res.should.have.status(201); 
+                    res.should.have.status(201);
+                    return Planet.find( {name: "Caseytopia"})
+                })
+                .then(function(res){
+                    res.length.should.equal(1);
+                })
+                
+        })
+
+        it('PUT Authetnicated user without admin will be rejected', function(){
+            return chai
+                .request(app)
+                .put(`/api/planets/${randomId}`)
+                .set('authorization', `Bearer ${token}`)
+                .then(function(res){
+                    res.should.not.have.status(204); 
                 })
                 .catch(function(err){
-                    console.error("THE ERROR HAPPENED"); 
+                    err.should.have.status(403); 
+            });
+        });
+
+        it('PUT Authenticated User with admin will be accepted', function(){
+            return chai
+                .request(app)
+                .put(`/api/planets/${randomId}`)
+                .set('authorization', `Bearer ${adminToken}`)
+                .send({
+                    id: randomId,
+                    name: "JackAndJill", //unique to our test
+                    description: faker.lorem.paragraph(),  
+                    composition: faker.lorem.words(),
+                    thumbnail: faker.image.imageUrl(), 
+                    moons: [
+                        {
+                            name: faker.lorem.word() 
+                        }
+                    ],
+                    comments: [
+                        {
+                            content: faker.lorem.paragraph(),
+                            username: faker.internet.userName()
+                        }
+                    ]
+                })
+                .then(function(res){
+                    res.should.have.status(204); 
+                    return Planet.find( {name: "JackAndJill"})
+                })
+                .then(function(res){
+                    res.length.should.equal(1);
+                    
+                        
                 })
         })
+
     });
 }); 
+
+

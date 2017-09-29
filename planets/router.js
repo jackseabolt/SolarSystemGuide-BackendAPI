@@ -115,7 +115,7 @@ router.post('/', jsonParser, jwtAuth, isAdminMiddleware, (req, res) => {
 
 // Admin Put
 router.put('/:id', jsonParser, jwtAuth, isAdminMiddleware, (req, res) => {
-  if(!(req.params.id || req.body.id || req.params.id === req.body.id)){
+  if(!req.params.id || !req.body.id || req.params.id !== req.body.id){
     res.status(500).json({error: 'Something went wrong'});
   }
   Planet 

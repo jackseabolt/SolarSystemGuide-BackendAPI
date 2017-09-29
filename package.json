@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "mocha test/test-planets.js"
+    "test": "mocha test/test-planets.js",
+    "instanbul": "nyc --reporter=html mocha test/test-planets.js"
   },
   "keywords": [],
   "author": "",
