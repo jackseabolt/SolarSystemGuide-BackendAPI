@@ -188,6 +188,38 @@ describe('Planet endpoint', function(){
                 })       
         });
 
+        it('POST ID should not work if user sends in an invalid string', function() {
+            return chai
+                .request(app)
+                .post(`/api/planets/${randomId}/comment`)
+                .set('authorization', `Bearer ${token}`)
+                .send({
+                    content: "",
+                })
+                .then(function(res) {
+                    res.should.not.have.status(201)
+                })
+                .catch(function(err){
+                    err.should.have.status(422); 
+                });
+        })
+
+        it('POST ID should not work if user sends in an invalid string', function() {
+            return chai
+                .request(app)
+                .post(`/api/planets/${randomId}/comment`)
+                .set('authorization', `Bearer ${token}`)
+                .send({
+                    content: 2,
+                })
+                .then(function(res) {
+                    res.should.not.have.status(201)
+                })
+                .catch(function(err){
+                    err.should.have.status(422); 
+                });
+        })
+
         it('DELETE PLNT ID + CMMT ID will delete a comment from a planet', function(){
             return chai
                 .request(app)
