@@ -160,7 +160,7 @@ describe('Planet endpoint', function(){
         it('POST ID should push a comment to the comments section WITH credentials', function() {
             return chai
                 .request(app)
-                .post(`/api/planets/${randomId}/comment`)
+                .post(`/api/planets/${randomId}/comments`)
                 .set('authorization', `Bearer ${token}`)
                 .send({
                     content: 'testcontent',
@@ -191,7 +191,7 @@ describe('Planet endpoint', function(){
         it('POST ID should not work if user sends in an invalid string', function() {
             return chai
                 .request(app)
-                .post(`/api/planets/${randomId}/comment`)
+                .post(`/api/planets/${randomId}/comments`)
                 .set('authorization', `Bearer ${token}`)
                 .send({
                     content: "",
@@ -207,7 +207,7 @@ describe('Planet endpoint', function(){
         it('POST ID should not work if user sends in an invalid string', function() {
             return chai
                 .request(app)
-                .post(`/api/planets/${randomId}/comment`)
+                .post(`/api/planets/${randomId}/comments`)
                 .set('authorization', `Bearer ${token}`)
                 .send({
                     content: 2,
@@ -223,7 +223,7 @@ describe('Planet endpoint', function(){
         it('DELETE PLNT ID + CMMT ID will delete a comment from a planet', function(){
             return chai
                 .request(app)
-                .delete(`/api/planets/${randomId}/comment/${commentId}`)
+                .delete(`/api/planets/${randomId}/comments/${commentId}`)
                 .set('authorization', `Bearer ${token}`)
                 .then(function (res) {
                     res.should.have.status(204);
@@ -240,7 +240,7 @@ describe('Planet endpoint', function(){
         it('PUT PLNT ID + CMMT ID will update a user comment', function(){
             return chai
                 .request(app)
-                .put(`/api/planets/${randomId}/comment/${commentId}`)
+                .put(`/api/planets/${randomId}/comments/${commentId}`)
                 .set('authorization', `Bearer ${token}`)
                 .send({
                     content: "testcontent",

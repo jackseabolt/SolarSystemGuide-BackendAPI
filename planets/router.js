@@ -37,7 +37,7 @@ router.get('/:id', (req, res) => {
 });
 
 // User Post 
-router.post('/:planetId/comment', jsonParser, jwtAuth, (req, res) => {
+router.post('/:planetId/comments', jsonParser, jwtAuth, (req, res) => {
 
   if (req.body.content.length < 1) {
     return res.status(422).json({message: 'Length Must be at Least 1 Character'});
@@ -62,7 +62,7 @@ router.post('/:planetId/comment', jsonParser, jwtAuth, (req, res) => {
 });
 
 // User Delete
-router.delete('/:planetId/comment/:commentId', jwtAuth, (req, res) => {
+router.delete('/:planetId/comments/:commentId', jwtAuth, (req, res) => {
   Planet
     .findByIdAndUpdate(
       {_id: req.params.planetId},
@@ -77,7 +77,7 @@ router.delete('/:planetId/comment/:commentId', jwtAuth, (req, res) => {
 });
 
 // User Put
-router.put('/:planetId/comment/:commentId', jsonParser, jwtAuth, (req, res) => {
+router.put('/:planetId/comments/:commentId', jsonParser, jwtAuth, (req, res) => {
   const updatedComment = req.body.content;
   Planet
     .findOneAndUpdate(
