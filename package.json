@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "mocha",
-    "instanbul": "nyc --reporter=html --reporter=lcov mocha"
+    "instanbul": "nyc --reporter=html mocha"
   },
   "keywords": [],
   "author": "",
