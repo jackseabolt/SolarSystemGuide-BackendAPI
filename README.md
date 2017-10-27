@@ -1,8 +1,8 @@
-<h1 align="center">SolarSystemGuide - backendAPI</h1>
+<h1 align="center">SolarSystemGuide - BackendAPI</h1>
 
 <p><em>This document provides general information on the SolarSystemGuide API.  For more information about the client-side SolarSystemGuide application, please see <a href="https://github.com/jackseabolt/SolarSystemGuide/blob/master/README.md">SolarSystemGuide</a>.</em></p>
 
-Why SolarSystemGuide-backendAPI
+Why SolarSystemGuide - BackendAPI
 -------------
 This API serves information about objects in the solar system. It was designed to serve as a backend for SolarSystemGuide, but may be accessed by anyone who would like to access the information contained within the database. 
 <br /><br />
