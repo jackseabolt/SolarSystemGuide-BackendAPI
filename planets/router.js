@@ -25,9 +25,9 @@ router.get('/', (req, res) => {
 });
 
 // Anyone Get
-router.get('/:id', (req, res) => {
+router.get('/:name', (req, res) => {
   Planet
-    .findById(req.params.id)
+    .find({name: req.params.name})
     .then(planet => {
       res.status(200).json(planet);
     })
