@@ -1,4 +1,4 @@
-# SolarSystemGuide - API
+# SolarSystemGuide - backendAPI
 
 <p><em>This document provides general information on the SolarSystemGuide client-side application.  For more information about the SolarSystemGuide API, please see <a href="https://github.com/jackseabolt/SolarSystemGuide/blob/master/README.md">SolarSystemGuide-backendAPI</a>.</em></p>
 
@@ -16,34 +16,34 @@ This API serves information about objects in the solar system. It was designed t
     </td>
   </tr>
   <tr>
-    <td>
+    <td width="55%">
       GET Request to this route will return a single planet with details.  
     </td>
-    <td>
+    <td width = "40%">
         <h4>https://solarsystemguide.herokuapp.com/api/planets/:planetName</h4>
     </td>
   </tr>
   <tr>
-    <td>
+    <td width="55%">
       POST Request to this route (Authenticated Users Only) will allow users to POST comments to a planetId. 
     </td>
-    <td>
+    <td width = "40%">
       <h4>https://solarsystemguide.herokuapp.com/api/planets/:planetId/comments</h4>
     </td>
   </tr>
   <tr>
-    <td>
+    <td width="55%">
       PUT Request to this route (Authenticated Users Only) will allow users to EDIT their comments to a planetId. 
     </td>
-    <td>
+    <td width = "40%">
        <h4>https://solarsystemguide.herokuapp.com/api/planets/:planetId/comments/:commentId</h4>
     </td>
   </tr>
   <tr>
-    <td>
+    <td width="55%">
       DELETE Request to this route (Authenticated Users Only) will allow users to DELETE their comments to a planetId. 
     </td>
-    <td>
+    <td width = "40%">
        <h4>https://solarsystemguide.herokuapp.com/api/planets/:planetId/comments/:commentId</h4>
     </td>
   </tr>
