@@ -18,7 +18,8 @@ const should = chai.should();
 
 chai.use(chaiHttp); 
 
-let randomId;
+let randomName;
+let randomId; 
 let commentId; 
 
 function seedData(){
@@ -46,6 +47,7 @@ function seedData(){
     }
     return Planet.insertMany(arr)
     .then(function(res) {
+        randomName=res[0].name
         randomId=res[0]._id
         commentId=res[0].comments[0]._id; 
     })
@@ -97,13 +99,6 @@ describe('Planet endpoint', function(){
         await User.remove({}) 
     }); 
 
-    // afterEach(function () {
-    //     return Planet.remove({})
-    //         .then(() => {
-    //             return User.remove({})
-    //         }); 
-    // });
-
     describe('/api/planets', function(){
         it('GET should return all planets with no credentials', function(){
             return chai 
@@ -133,21 +128,24 @@ describe('Planet endpoint', function(){
                 })
         })
 
-        it('GET ID should return a single planet with no credentials', function() {
+        it('GET NAME should return a single planet with no credentials', function() {
+            console.log(`RANDOME NAME IS ${randomName}`)
             return chai
                 .request(app)
-                .get(`/api/planets/${randomId}`)
+                .get(`/api/planets/${randomName}`)
                 .then(function(res) {
                     res.should.have.status(200);
                     res.should.be.json;
-                    res.body.should.be.an('object');
-                    res.body.should.include.keys("_id", "name", "description", "composition", "thumbnail", "moons", "comments");
-                    res.body._id.should.not.be.null;
-                    res.body.moons.forEach(function(moon) {
+                    res.body.should.be.an('array');
+                    res.body.length.should.equal(1); 
+                    res.body[0].should.be.an('object');
+                    res.body[0].should.include.keys("_id", "name", "description", "composition", "thumbnail", "moons", "comments");
+                    res.body[0]._id.should.not.be.null;
+                    res.body[0].moons.forEach(function(moon) {
                         moon.should.be.an('object');
                         moon.should.include.keys("_id", "name");
                         moon._id.should.not.be.null;
-                    res.body.comments.forEach(function(comment) {
+                    res.body[0].comments.forEach(function(comment) {
                         comment.should.be.an('object');
                         comment.should.include.keys("_id", "username", "content", "created");
                         comment._id.should.not.be.null;
