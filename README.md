@@ -1,4 +1,4 @@
-# SolarSystemGuide - backendAPI
+<h1 style="text-align: center">SolarSystemGuide - backendAPI</h1>
 
 <p><em>This document provides general information on the SolarSystemGuide API.  For more information about the client-side SolarSystemGuide application, please see <a href="https://github.com/jackseabolt/SolarSystemGuide/blob/master/README.md">SolarSystemGuide</a>.</em></p>
 
