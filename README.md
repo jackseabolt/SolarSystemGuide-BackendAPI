@@ -1,8 +1,6 @@
 # SolarSystemGuide - API
 
 <p><em>This document provides general information on the SolarSystemGuide client-side application.  For more information about the SolarSystemGuide API, please see <a href="https://github.com/jackseabolt/SolarSystemGuide/blob/master/README.md">SolarSystemGuide-backendAPI</a>.</em></p>
-## API Documentation
-
 
 Why SolarSystemGuide-backendAPI
 -------------
@@ -27,8 +25,12 @@ PUT Request to this route (Authenticated Users Only) will allow users to EDIT th
 #### https://solarsystemguide.herokuapp.com/api/planets/:planetId/comments/:commentId
 DELETE Request to this route (Authenticated Users Only) will allow users to DELETE their comments to a planetId. 
 
+
 ## ScreenShot of GET Request
 <img src="./ScreenShot.png">
 
-##Technology
+<h2>Technology</h2>
 This app was constructed using Javascript, Express, Passport Authentication, bCrypt, Mongo, Mongoose.
+
+<h2>Authors</h2>
+This API was constructed by Jack Seabolt and Eric Pcholinski.
