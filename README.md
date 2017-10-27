@@ -26,6 +26,7 @@ PUT Request to this route (Authenticated Users Only) will allow users to EDIT th
 DELETE Request to this route (Authenticated Users Only) will allow users to DELETE their comments to a planetId. 
 
 
+
 ## ScreenShot of GET Request
 <img src="./ScreenShot.png">
 
