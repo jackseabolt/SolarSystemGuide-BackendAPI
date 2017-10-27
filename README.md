@@ -25,7 +25,7 @@ PUT Request to this route (Authenticated Users Only) will allow users to EDIT th
 #### https://solarsystemguide.herokuapp.com/api/planets/:planetId/comments/:commentId
 DELETE Request to this route (Authenticated Users Only) will allow users to DELETE their comments to a planetId. 
 
-
+<br />
 ## ScreenShot of GET Request
 <img src="./ScreenShot.png">
 
